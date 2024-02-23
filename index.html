@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Textarea and Button</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .container {
+        text-align: center;
+    }
+    textarea {
+        width: 800px;
+        height: 300px;
+        resize: none;
+        margin-bottom: 20px;
+    }
+    button {
+        width: 800px;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    code {
+        display: block;
+        background-color: #f4f4f4;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <textarea id="inputText" placeholder="Enter text here..."></textarea>
+    <button id="transformButton" type="button">Transform</button>
+</div>
+
+<div id="contexto" style="display: none;"></div>
+
+<script>
+    document.getElementById('transformButton').addEventListener('click', function() {
+        var inputText = document.getElementById('inputText').value;
+        var outputText = transformToHTML(inputText);
+        document.getElementById('contexto').style.display = 'block';
+        document.getElementById('contexto').innerHTML = outputText;
+    });
+
+    function transformToHTML(input) {
+        var output = input.replace(/##\s(.*?)\n/g, '<h2>$1</h2>');
+        output = output.replace(/#\s(.*?)\n/g, '<h1>$1</h1>');
+        output = output.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        output = output.replace(/__(.*?)__/g, '<b>$1</b>');
+        output = output.replace(/\*(.*?)\*/g, '<i>$1</i>');
+        output = output.replace(/_(.*?)_/g, '<i>$1</i>');
+        output = output.replace(/~~(.*?)~~/g, '<strike>$1</strike>');
+        output = output.replace(/\*\*\*(.*?)\*\*\*/g, '<b><i>$1</i></b>');
+        output = output.replace(/<sub>(.*?)<\/sub>/g, '<sub>$1</sub>');
+        output = output.replace(/<sup>(.*?)<\/sup>/g, '<sup>$1</sup>');
+        
+        output = output.replace(/(.*?)\n/g, function(match, p1) {
+            if (p1.trim() === '') {
+                return '<p></p>';
+            } else {
+                return '<p>' + p1 + '</p>';
+            }
+        });
+        return output;
+    }
+</script>
+
+</body>
+</html>
